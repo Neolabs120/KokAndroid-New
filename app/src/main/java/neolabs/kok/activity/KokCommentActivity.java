@@ -273,10 +273,14 @@ public class KokCommentActivity extends AppCompatActivity {
             getCommentUserInfo(items.get(position).kokuserauthid, new getCommentUserCallback() {
                 @Override
                 public void setUserInfo(String[] userinfo) {
-                    Glide.with(KokCommentActivity.this)
-                            .load(RetrofitExService.BASE_URL + "images/" + userinfo[1])
-                            .apply(RequestOptions.circleCropTransform())
-                            .into(myViewHolder.profileImage);
+                    if(userinfo[1].equals("default")) {
+                        profileImage.setImageResource(R.mipmap.ic_launcher_round);
+                    } else {
+                        Glide.with(KokCommentActivity.this)
+                                .load(RetrofitExService.BASE_URL + "images/" + userinfo[1])
+                                .apply(RequestOptions.circleCropTransform())
+                                .into(myViewHolder.profileImage);
+                    }
                     myViewHolder.kokuser.setText(userinfo[0]);
                     myViewHolder.koktext.setText(items.get(position).koktext);
 
