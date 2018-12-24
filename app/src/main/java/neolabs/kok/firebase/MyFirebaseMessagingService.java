@@ -34,6 +34,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = MyFirebaseMessagingService.class.getSimpleName();
 
+    public static String saveToken = "";
+    public static Boolean isTokenSaved = false;
+
     // 메시지 수신
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -72,37 +75,44 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onNewToken(String token) {
         Log.d(TAG, "Refreshed token: " + token);
 
-        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+        saveToken = token;
+
+        /*SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
 
         String userauthid = pref.getString("userauthid", "");
 
-        //새로운 토큰을 서버에도 등록시켜주자.....하아.....
-        Retrofit client = new Retrofit.Builder().baseUrl(RetrofitExService.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        RetrofitExService service = client.create(RetrofitExService.class);
-        Call<Data> call = service.editToken(userauthid, token);
-        call.enqueue(new Callback<Data>() {
-            @Override
-            public void onResponse(@NonNull Call<Data> call, @NonNull retrofit2.Response<Data> response) {
-                switch (response.code()) {
-                    case 200:
-                        break;
-                    case 409:
-                        Toast.makeText(getApplicationContext(), "에러가 발생하였습니다.", Toast.LENGTH_SHORT).show();
-                        break;
-                    default:
-                        Log.e("asdf", response.code() + "");
-                        break;
+        if(userauthid.equals("")) {
+            isTokenSaved = false;
+        } else {
+            //새로운 토큰을 서버에도 등록시켜주자.....하아.....
+            isTokenSaved = true;
+            Retrofit client = new Retrofit.Builder().baseUrl(RetrofitExService.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
+            RetrofitExService service = client.create(RetrofitExService.class);
+            Call<Data> call = service.editToken(userauthid, token);
+            call.enqueue(new Callback<Data>() {
+                @Override
+                public void onResponse(@NonNull Call<Data> call, @NonNull retrofit2.Response<Data> response) {
+                    switch (response.code()) {
+                        case 200:
+                            break;
+                        case 409:
+                            Toast.makeText(getApplicationContext(), "에러가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                            break;
+                        default:
+                            Log.e("asdf", response.code() + "");
+                            break;
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(@NonNull Call<Data> call, @NonNull Throwable t) {
-                Log.d("checkonthe", "error");
-            }
-        });
+                @Override
+                public void onFailure(@NonNull Call<Data> call, @NonNull Throwable t) {
+                    Log.d("checkonthe", "error");
+                }
+            });
 
-        editor.putString("firebasetoken", token);
-        editor.apply();
+            editor.putString("firebasetoken", token);
+            editor.apply();
+        }*/
     }
 }

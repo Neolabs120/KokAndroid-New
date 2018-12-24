@@ -3,6 +3,7 @@ package neolabs.kok.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import neolabs.kok.firebase.MyFirebaseMessagingService;
 import neolabs.kok.sutff.LockClass;
 import neolabs.kok.R;
 import neolabs.kok.data.Data;
@@ -90,7 +92,10 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString("nickname", body.getNickname());
                         editor.putString("introduce", body.getIntroduce());
                         editor.putString("profileImage", body.getProfileimage());
+                        editor.putString("firebasetoken", MyFirebaseMessagingService.saveToken);
                         editor.apply();
+
+                        savetokenToServer(body.getId(), MyFirebaseMessagingService.saveToken);
 
                         Toast.makeText(LoginActivity.this, "로그인 완료", Toast.LENGTH_SHORT).show();
 
@@ -111,5 +116,32 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d("checkonthe", "error");
             }
         });
+    }
+
+    public void savetokenToServer(String userauthid, String token) {
+        Retrofit client = new Retrofit.Builder().baseUrl(RetrofitExService.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        RetrofitExService service = client.create(RetrofitExService.class);
+        Call<Data> call = service.editToken(userauthid, token);
+        call.enqueue(new Callback<Data>() {
+            @Override
+            public void onResponse(@NonNull Call<Data> call, @NonNull retrofit2.Response<Data> response) {
+                switch (response.code()) {
+                    case 200:
+                        break;
+                    case 409:
+                        Toast.makeText(getApplicationContext(), "에러가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        Log.e("asdf", response.code() + "");
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Data> call, @NonNull Throwable t) {
+                Log.d("checkonthe", "error");
+            }
+        });
+
     }
 }
