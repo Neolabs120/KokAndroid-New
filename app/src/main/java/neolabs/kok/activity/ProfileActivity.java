@@ -197,12 +197,20 @@ public class ProfileActivity extends AppCompatActivity implements SwipeRefreshLa
         putintroduce.setText(introduce);
 
         //나중에 로드중인 gif로 바꿔주자.
-        profileImage.setImageResource(R.mipmap.ic_launcher_round);
+        /*profileImage.setImageResource(R.mipmap.ic_launcher_round);
 
         Glide.with(ProfileActivity.this)
                 .load(RetrofitExService.BASE_URL + "images/" + profilelink)
                 .apply(RequestOptions.circleCropTransform())
-                .into(profileImage);
+                .into(profileImage);*/
+        if(profileImage.equals("default")) {
+            profileImage.setImageResource(R.mipmap.ic_launcher_round);
+        } else {
+            Glide.with(ProfileActivity.this)
+                    .load(RetrofitExService.BASE_URL + "images/" + profilelink)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(profileImage);
+        }
     }
 
     //서버에서 가까이에 있는 콕을 받아온다.
