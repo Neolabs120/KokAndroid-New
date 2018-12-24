@@ -37,7 +37,7 @@ public interface RetrofitExService {
     Call<List<KokData>> getPick(@Query("latitude") String latitude, @Query("longitude") String longitude);
 
     @GET("modifyfirebasetoken")
-    Call<Data> editToken(@Query("userauthid") String userauthid, @Query("firebasetoken") String firebasetoken);
+    Call<Data> editToken(@Query("useremail") String useremail, @Query("firebasetoken") String firebasetoken);
 
     @GET("getpickmy")
     Call<List<KokData>> getmyPick(@Query("userauthid") String userauthid);

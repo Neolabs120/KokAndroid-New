@@ -75,11 +75,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onNewToken(String token) {
         Log.d(TAG, "Refreshed token: " + token);
 
-        saveToken = token;
-
-        /*SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
 
+        editor.putString("firebasetoken", token);
+        editor.apply();
+
+        /*
         String userauthid = pref.getString("userauthid", "");
 
         if(userauthid.equals("")) {
@@ -110,9 +112,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     Log.d("checkonthe", "error");
                 }
             });
-
-            editor.putString("firebasetoken", token);
-            editor.apply();
         }*/
     }
 }
