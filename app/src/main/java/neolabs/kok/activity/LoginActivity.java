@@ -92,10 +92,10 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString("nickname", body.getNickname());
                         editor.putString("introduce", body.getIntroduce());
                         editor.putString("profileImage", body.getProfileimage());
-                        editor.putString("firebasetoken", MyFirebaseMessagingService.saveToken);
                         editor.apply();
 
-                        savetokenToServer(body.getId(), MyFirebaseMessagingService.saveToken);
+                        String token = pref.getString("firebasetoken", "");
+                        savetokenToServer(body.getEmail(), token);
 
                         Toast.makeText(LoginActivity.this, "로그인 완료", Toast.LENGTH_SHORT).show();
 
@@ -118,10 +118,10 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public void savetokenToServer(String userauthid, String token) {
+    public void savetokenToServer(String useremail, String token) {
         Retrofit client = new Retrofit.Builder().baseUrl(RetrofitExService.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
         RetrofitExService service = client.create(RetrofitExService.class);
-        Call<Data> call = service.editToken(userauthid, token);
+        Call<Data> call = service.editToken(useremail, token);
         call.enqueue(new Callback<Data>() {
             @Override
             public void onResponse(@NonNull Call<Data> call, @NonNull retrofit2.Response<Data> response) {
