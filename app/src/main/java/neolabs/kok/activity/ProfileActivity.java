@@ -173,7 +173,7 @@ public class ProfileActivity extends AppCompatActivity implements SwipeRefreshLa
         //나중에 로드중인 GIF로 바꿔주자.
 
 
-        if(profileImage.equals("default")) {
+        if(profilelink.equals("default")) {
             profileImage.setImageResource(R.mipmap.ic_launcher_round);
         } else {
             Glide.with(ProfileActivity.this)
@@ -203,7 +203,7 @@ public class ProfileActivity extends AppCompatActivity implements SwipeRefreshLa
                 .load(RetrofitExService.BASE_URL + "images/" + profilelink)
                 .apply(RequestOptions.circleCropTransform())
                 .into(profileImage);*/
-        if(profileImage.equals("default")) {
+        if(profilelink.equals("default")) {
             profileImage.setImageResource(R.mipmap.ic_launcher_round);
         } else {
             Glide.with(ProfileActivity.this)

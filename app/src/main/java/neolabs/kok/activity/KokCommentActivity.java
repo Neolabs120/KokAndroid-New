@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -46,7 +47,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class KokCommentActivity extends AppCompatActivity {
+public class KokCommentActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener  {
 
     RecyclerView recyclerView;
     TextView newnickname;
@@ -65,6 +66,8 @@ public class KokCommentActivity extends AppCompatActivity {
     List<String> commentsid = new ArrayList<>();
 
     List<KokCommentItem> items = new ArrayList<>();
+
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     static Activity activity;
 
@@ -91,6 +94,14 @@ public class KokCommentActivity extends AppCompatActivity {
         sendbuttonview = findViewById(R.id.commentsend);
         profileImage = findViewById(R.id.profile_image3);
 
+        mSwipeRefreshLayout = findViewById(R.id.swipe_layout3);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+                android.R.color.holo_green_dark,
+                android.R.color.holo_orange_dark,
+                android.R.color.holo_blue_dark);
+        mSwipeRefreshLayout.setRefreshing(false);
+
         recyclerView = findViewById(R.id.commentrecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -101,43 +112,7 @@ public class KokCommentActivity extends AppCompatActivity {
 
         kokid = intent.getStringExtra("kokidarray");
 
-        Retrofit client = new Retrofit.Builder().baseUrl(RetrofitExService.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        RetrofitExService service = client.create(RetrofitExService.class);
-        Call<KokData> call = service.getComment(kokid);
-        call.enqueue(new Callback<KokData>() {
-            @Override
-            public void onResponse(@NonNull Call<KokData> call, @NonNull Response<KokData> response) {
-                switch (response.code()) {
-                    case 200:
-                        items.clear();
-                        //mAdapter.notifyDataSetChanged();
-                        final List<Comment> comments = response.body().getComments();
-                        for(int i = 0; i < comments.size(); i++) {
-                            final int low = i;
-                            if (comments.get(low).getAuthorauthid().equals(myselfauthid)) {
-                                items.add(new KokCommentItem(comments.get(low).getContents(), comments.get(low).getAuthorauthid(),  true));
-                            } else {
-                                items.add(new KokCommentItem(comments.get(low).getContents(), comments.get(low).getAuthorauthid(), false));
-                            }
-                            commentsid.add(comments.get(low).getId());
-                        }
-
-                        recyclerView.setAdapter(mAdapter);
-                        break;
-                    case 409:
-                        Toast.makeText(KokCommentActivity.this, "에러가 발생하였습니다.", Toast.LENGTH_SHORT).show();
-                        break;
-                    default:
-                        Log.e("asdf", response.code() + "");
-                        break;
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<KokData> call, @NonNull Throwable t) {
-                Log.d("checkonthe", "error");
-            }
-        });
+        loadCommentFromServer();
 
         sendbuttonview.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,6 +156,52 @@ public class KokCommentActivity extends AppCompatActivity {
                         Log.d("checkonthe", "error");
                     }
                 });
+            }
+        });
+    }
+
+    @Override
+    public void onRefresh() {
+        loadCommentFromServer();
+    }
+
+    public void loadCommentFromServer() {
+        Retrofit client = new Retrofit.Builder().baseUrl(RetrofitExService.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        RetrofitExService service = client.create(RetrofitExService.class);
+        Call<KokData> call = service.getComment(kokid);
+        call.enqueue(new Callback<KokData>() {
+            @Override
+            public void onResponse(@NonNull Call<KokData> call, @NonNull Response<KokData> response) {
+                switch (response.code()) {
+                    case 200:
+                        items.clear();
+                        //mAdapter.notifyDataSetChanged();
+                        final List<Comment> comments = response.body().getComments();
+                        for(int i = 0; i < comments.size(); i++) {
+                            final int low = i;
+                            if (comments.get(low).getAuthorauthid().equals(myselfauthid)) {
+                                items.add(new KokCommentItem(comments.get(low).getContents(), comments.get(low).getAuthorauthid(),  true));
+                            } else {
+                                items.add(new KokCommentItem(comments.get(low).getContents(), comments.get(low).getAuthorauthid(), false));
+                            }
+                            commentsid.add(comments.get(low).getId());
+                        }
+                        recyclerView.setAdapter(mAdapter);
+                        mAdapter.notifyDataSetChanged();
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        break;
+                    case 409:
+                        Toast.makeText(KokCommentActivity.this, "에러가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        Log.e("asdf", response.code() + "");
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<KokData> call, @NonNull Throwable t) {
+                Log.d("checkonthe", "error");
             }
         });
     }
@@ -274,7 +295,7 @@ public class KokCommentActivity extends AppCompatActivity {
                 @Override
                 public void setUserInfo(String[] userinfo) {
                     if(userinfo[1].equals("default")) {
-                        profileImage.setImageResource(R.mipmap.ic_launcher_round);
+                        myViewHolder.profileImage.setImageResource(R.mipmap.ic_launcher_round);
                     } else {
                         Glide.with(KokCommentActivity.this)
                                 .load(RetrofitExService.BASE_URL + "images/" + userinfo[1])
