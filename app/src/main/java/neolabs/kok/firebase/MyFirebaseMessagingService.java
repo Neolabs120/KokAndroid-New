@@ -8,16 +8,28 @@ import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.List;
 import java.util.Map;
 
 import neolabs.kok.R;
 import neolabs.kok.activity.MainActivity;
+import neolabs.kok.activity.ProfileActivity;
+import neolabs.kok.data.Data;
+import neolabs.kok.data.KokData;
+import neolabs.kok.item.KokItem;
+import neolabs.kok.retrofit.RetrofitExService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = MyFirebaseMessagingService.class.getSimpleName();
@@ -62,6 +74,33 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
+
+        String userauthid = pref.getString("userauthid", "");
+
+        //새로운 토큰을 서버에도 등록시켜주자.....하아.....
+        Retrofit client = new Retrofit.Builder().baseUrl(RetrofitExService.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        RetrofitExService service = client.create(RetrofitExService.class);
+        Call<Data> call = service.editToken(userauthid, token);
+        call.enqueue(new Callback<Data>() {
+            @Override
+            public void onResponse(@NonNull Call<Data> call, @NonNull retrofit2.Response<Data> response) {
+                switch (response.code()) {
+                    case 200:
+                        break;
+                    case 409:
+                        Toast.makeText(getApplicationContext(), "에러가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        Log.e("asdf", response.code() + "");
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Data> call, @NonNull Throwable t) {
+                Log.d("checkonthe", "error");
+            }
+        });
 
         editor.putString("firebasetoken", token);
         editor.apply();
