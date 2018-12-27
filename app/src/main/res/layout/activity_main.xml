@@ -15,7 +15,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="20dp"
         android:layout_marginRight="20dp"
-        android:src="@mipmap/ic_launcher_round" />
+        android:src="@drawable/setting" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/addkok"
@@ -25,6 +25,6 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="20dp"
         android:layout_marginRight="10dp"
-        android:src="@mipmap/ic_launcher_round" />
+        android:src="@drawable/plus" />
 
 </RelativeLayout>
