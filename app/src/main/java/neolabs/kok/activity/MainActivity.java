@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
                                     marker.setMarkerType(MapPOIItem.MarkerType.CustomImage);
 
-                                    marker.setCustomImageResourceId(R.drawable.custom_marker_red);
+                                    marker.setCustomImageResourceId(R.drawable.location);
                                     marker.setCustomImageAutoscale(false);
                                     marker.setCustomImageAnchor(0.5f, 1.0f);
                                     mapView.addPOIItem(marker);
