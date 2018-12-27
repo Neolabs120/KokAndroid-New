@@ -250,7 +250,7 @@ public class KokCommentActivity extends AppCompatActivity implements SwipeRefres
                         profileImagelink = response.body().getProfileimage();
                         kokcomment.setText(intent.getStringExtra("kokcomment"));
                         if(profileImagelink.equals("default")) {
-                            profileImage.setImageResource(R.mipmap.ic_launcher_round);
+                            profileImage.setImageResource(R.drawable.icon);
                         } else {
                             Glide.with(KokCommentActivity.this)
                                     .load(RetrofitExService.BASE_URL + "images/" + profileImagelink)
@@ -294,7 +294,7 @@ public class KokCommentActivity extends AppCompatActivity implements SwipeRefres
                 @Override
                 public void setUserInfo(String[] userinfo) {
                     if(userinfo[1].equals("default")) {
-                        myViewHolder.profileImage.setImageResource(R.mipmap.ic_launcher_round);
+                        myViewHolder.profileImage.setImageResource(R.drawable.icon);
                     } else {
                         Glide.with(KokCommentActivity.this)
                                 .load(RetrofitExService.BASE_URL + "images/" + userinfo[1])
@@ -351,7 +351,7 @@ public class KokCommentActivity extends AppCompatActivity implements SwipeRefres
                             AlertDialog alert = alt_bld.create();
 
                             // 대화창 아이콘 설정
-                            alert.setIcon(R.mipmap.ic_launcher);
+                            alert.setIcon(R.drawable.icon);
 
                             // 대화창 배경 색 설정
                             //alert.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(255,62,79,92)));

@@ -129,7 +129,7 @@ public class ProfileActivity extends AppCompatActivity implements SwipeRefreshLa
                         AlertDialog alert = alt_bld.create();
 
                         // 대화창 아이콘 설정
-                        alert.setIcon(R.mipmap.ic_launcher);
+                        alert.setIcon(R.drawable.icon);
 
                         alert.show();
                     }
@@ -175,7 +175,7 @@ public class ProfileActivity extends AppCompatActivity implements SwipeRefreshLa
 
 
         if(profilelink.equals("default")) {
-            profileImage.setImageResource(R.mipmap.ic_launcher_round);
+            profileImage.setImageResource(R.drawable.icon);
         } else {
             Glide.with(ProfileActivity.this)
                     .load(RetrofitExService.BASE_URL + "images/" + profilelink)
@@ -205,7 +205,7 @@ public class ProfileActivity extends AppCompatActivity implements SwipeRefreshLa
                 .apply(RequestOptions.circleCropTransform())
                 .into(profileImage);*/
         if(profilelink.equals("default")) {
-            profileImage.setImageResource(R.mipmap.ic_launcher_round);
+            profileImage.setImageResource(R.drawable.icon);
         } else {
             Glide.with(ProfileActivity.this)
                     .load(RetrofitExService.BASE_URL + "images/" + profilelink)
