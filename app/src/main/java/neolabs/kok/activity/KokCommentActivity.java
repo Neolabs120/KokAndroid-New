@@ -108,7 +108,6 @@ public class KokCommentActivity extends AppCompatActivity implements SwipeRefres
         mAdapter = new RecyclerAdapter(items);
 
         getuserInfo(intent.getStringExtra("userauthid"));
-        kokcomment.setText(intent.getStringExtra("kokcomment"));
 
         kokid = intent.getStringExtra("kokidarray");
 
@@ -249,7 +248,7 @@ public class KokCommentActivity extends AppCompatActivity implements SwipeRefres
                     case 200:
                         newnickname.setText(response.body().getNickname());
                         profileImagelink = response.body().getProfileimage();
-
+                        kokcomment.setText(intent.getStringExtra("kokcomment"));
                         if(profileImagelink.equals("default")) {
                             profileImage.setImageResource(R.mipmap.ic_launcher_round);
                         } else {

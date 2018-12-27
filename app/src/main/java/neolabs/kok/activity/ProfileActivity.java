@@ -82,6 +82,7 @@ public class ProfileActivity extends AppCompatActivity implements SwipeRefreshLa
                 editor.clear();
                 editor.apply();
 
+                MainActivity.finishThis();
                 Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
