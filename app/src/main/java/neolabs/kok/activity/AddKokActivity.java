@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.annotation.RestrictTo;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import neolabs.kok.sutff.GPSInfo;
 import neolabs.kok.R;
@@ -22,7 +26,12 @@ import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class AddKokActivity extends AppCompatActivity {
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.BehaviorSubject;
+
+public class AddKokActivity extends RxAppCompatActivity {
 
     EditText inputmessage;
     Button sendmessage;

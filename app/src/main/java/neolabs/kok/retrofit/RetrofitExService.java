@@ -3,6 +3,7 @@ package neolabs.kok.retrofit;
 import java.util.HashMap;
 import java.util.List;
 
+import io.reactivex.Observable;
 import neolabs.kok.data.Data;
 import neolabs.kok.data.KokData;
 import neolabs.kok.data.Profile;

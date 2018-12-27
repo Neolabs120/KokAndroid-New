@@ -94,6 +94,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 if(!passwordstring.equals("")) encryptedstring = getsha512.getSHA512(passwordstring);
                 else encryptedstring = "";
                 passwordstring = "";
+
                 nicknamestring = inputnickname.getText().toString();
                 if(editmale.isChecked()) {
                     genderstring = "Male";
@@ -102,6 +103,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 } else {
                     genderstring = "";
                 }
+
                 introducestring = inputintroduce.getText().toString();
 
                 Retrofit client = new Retrofit.Builder().baseUrl(RetrofitExService.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
